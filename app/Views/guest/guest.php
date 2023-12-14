@@ -22,6 +22,7 @@
     <link href="<?php echo base_url('css/bootstrap-icons.css') ?>" rel="stylesheet">
 
     <link href="<?php echo base_url('css/templatemo-topic-listing.css') ?>" rel="stylesheet">
+    <link rel="shortcut icon" href=<?php echo base_url("img/logo/uns.png") ?>>
     <!--
 
 TemplateMo 590 topic listing
@@ -550,7 +551,7 @@ https://templatemo.com/tm-590-topic-listing
                     <div class="col-12 text-center mt-5">
                         <p class="text-white">
                             Ingin daftar member?
-                            <a href="#" class="btn custom-btn custom-border-btn ms-3">Klik disini!</a>
+                            <a href="/otentikasi" class="btn custom-btn custom-border-btn ms-3">Klik disini!</a>
                         </p>
                     </div>
                 </div>

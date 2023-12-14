@@ -10,6 +10,8 @@ $routes->get('/', 'Guest\Guest::index');
 
 //LOGIN
 $routes->get('/otentikasi', 'Otentikasi::index'); //halaman login
+$routes->get('/signup', 'Otentikasi::signup'); //form signup
+$routes->post('/masuk', 'Otentikasi::login'); //fungsi login
 
 //Admin Panel
 $routes->get('/admin', 'AdminController::index');
