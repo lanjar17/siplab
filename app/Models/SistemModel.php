@@ -12,7 +12,7 @@ class SistemModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = ['nama_lengkap', 'bio', 'username', 'password', 'nip', 'telepon', 'level', 'avatar', 'instansi', 'status'];
 
     // Dates
     protected $useTimestamps = false;

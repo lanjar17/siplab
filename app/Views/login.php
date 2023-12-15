@@ -20,6 +20,8 @@
     <link rel="stylesheet" href="<?php echo base_url("css/vertical-layout-light/style.css") ?>">
     <!-- endinject -->
     <link rel="shortcut icon" href="<?php echo base_url("img/logo/uns.png") ?>" />
+    <!-- Sweet Alert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -40,6 +42,11 @@
                             <?php if (session()->getFlashdata('pesan') != '') { ?>
                                 <div class="alert alert-danger" role="alert">
                                     <?= session()->getFlashdata('pesan'); ?>
+                                </div>
+                            <?php } ?>
+                            <?php if (session()->getFlashdata('sukses') != '') { ?>
+                                <div class="alert alert-success" role="alert">
+                                    <?= session()->getFlashdata('sukses'); ?>
                                 </div>
                             <?php } ?>
                             <form class="pt-3 validate-form" method="POST" action="/masuk">
@@ -64,7 +71,7 @@
                                 </div>
 
                                 <div class="text-center mt-4 fw-light">
-                                    Belum jadi member? <a href="#" id="mendaftar" onclick="signup()" class="text-primary">Daftar</a>
+                                    Belum jadi member? <a href="#" id="signup" onclick="signup()" class="text-primary">Daftar</a>
                                 </div>
                             </form>
                         </div>
@@ -91,6 +98,7 @@
     <script src="<?php echo base_url("js/todolist.js") ?>"></script>
     <!-- endinject -->
 
+
     <!-- Modal Register -->
     <script>
         function signup() {
@@ -105,6 +113,7 @@
 
         };
     </script>
+    
 
 </body>
 

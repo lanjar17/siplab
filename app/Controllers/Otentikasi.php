@@ -54,6 +54,91 @@ class Otentikasi extends BaseController
         }
     }
 
+    public function daftar()
+    {
+        $validasi = \Config\Services::validation();
+
+        $valid = $this->validate([
+            'nama_lengkap' => [
+                'label' => 'Nama Lengkap',
+                'rules' => 'required|min_length[4]',
+                'errors' => [
+                    'required' => '{field} tidak boleh kosong',
+                    'min_length' => '{field} minimal 4 karakter'
+                ]
+            ],
+            'username' => [
+                'label' => 'Username',
+                'rules' => 'required|min_length[5]|is_unique[users.username]',
+                'errors' => [
+                    'is_unique' => '{field} sudah terdaftar',
+                    'required' => '{field} tidak boleh kosong',
+                    'min_length' => '{field} minimal 5 karakter'
+                ]
+            ],
+            'password' => [
+                'label' => 'Password',
+                'rules' => 'required|min_length[5]|regex_match[/^(?=.*?\d)(?=.*?[a-zA-Z])[a-zA-Z\d]+$/]',
+                'errors' => [
+                    'regex_match' => '{field} terdiri dari angka dan huruf',
+                    'required' => '{field} tidak boleh kosong',
+                    'min_length' => '{field} minimal 10 karakter'
+                ]
+            ],
+            'konfirmasi' => [
+                'label' => 'Konfirmasi Password',
+                'rules' => 'required|min_length[3]|matches[password]',
+                'errors' => [
+                    'required' => '{field} tidak boleh kosong',
+                    'min_length' => '{field} minimal 10 karakter',
+                    'matches' => '{field} tidak sesuai'
+                ]
+            ],
+        ]);
+
+        if (!$valid) {
+            $alert = [
+                'error' => [
+                    'nama_lengkap' => $validasi->getError('nama_lengkap'),
+                    'username' => $validasi->getError('username'),
+                    'password' => $validasi->getError('password'),
+                    'konfirmasi' => $validasi->getError('konfirmasi'),
+                ]
+            ];
+            return $this->response->setJSON($alert);
+        } else {
+            if ($this->request->getFile('avatar')->getName() != '') {
+                $avatar = $this->request->getFile('avatar');
+                $avatar->move(ROOTPATH . 'public/img/avatar');
+                $namaavatar = $avatar->getName();
+            } else {
+                $namaavatar = 'default.png';
+            }
+        }
+
+        $data = [
+            'nama_lengkap' => $this->request->getVar('nama_lengkap'),
+            'bio' => '',
+            'nip' => $this->request->getVar('nip'),
+            'telepon' => $this->request->getVar('telepon'),
+            'username' => $this->request->getVar('username'),
+            'password' => md5($this->request->getVar('password')),
+            'avatar' => $namaavatar,
+            'instansi' => $this->request->getVar('instansi'),
+            'level' => 'Peminjam',
+            'status' => 0
+        ];
+
+        $this->sistemmodel->save($data);
+
+        session()->setFlashdata('sukses', 'Berhasil mendaftar member. Silahkan tunggu disetujui Admin');
+        return redirect()->to('/otentikasi');
+        // $pesan = [
+        //     'sukses' => 'Data anggota berhasil diinput'
+        // ];
+        // return $this->response->setJSON($pesan);
+    }
+
     public function signup()
     {
         if ($this->request->isAjax()) {
