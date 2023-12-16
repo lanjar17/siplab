@@ -49,6 +49,26 @@
                                     <?= session()->getFlashdata('sukses'); ?>
                                 </div>
                             <?php } ?>
+                            <?php if (session()->getFlashdata('eror1') != '') { ?>
+                                <div class="alert alert-danger" role="alert">
+                                    <?= session()->getFlashdata('eror1'); ?>
+                                </div>
+                            <?php } ?>
+                            <?php if (session()->getFlashdata('eror2') != '') { ?>
+                                <div class="alert alert-danger" role="alert">
+                                    <?= session()->getFlashdata('eror2'); ?>
+                                </div>
+                            <?php } ?>
+                            <?php if (session()->getFlashdata('eror3') != '') { ?>
+                                <div class="alert alert-danger" role="alert">
+                                    <?= session()->getFlashdata('eror3'); ?>
+                                </div>
+                            <?php } ?>
+                            <?php if (session()->getFlashdata('eror4') != '') { ?>
+                                <div class="alert alert-danger" role="alert">
+                                    <?= session()->getFlashdata('eror4'); ?>
+                                </div>
+                            <?php } ?>
                             <form class="pt-3 validate-form" method="POST" action="/masuk">
 
                                 <div class=" form-group">

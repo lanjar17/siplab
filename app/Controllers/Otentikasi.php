@@ -18,37 +18,79 @@ class Otentikasi extends BaseController
         return view("login");
     }
 
+    // public function login()
+    // {
+    //     $username = $this->request->getVar('username');
+    //     $password = $this->request->getVar('password');
+    //     $otentik = $this->sistemmodel->where(['username' => $username])->first();
+    //     if ($otentik) {
+
+    //         $verifikasi  = password_verify(md5($password), password_hash($otentik['password'], PASSWORD_DEFAULT));
+    //         if ($verifikasi) {
+    //             $sesi = [
+    //                 'username'      => $otentik['username'],
+    //                 'id_user'      => $otentik['id_user'],
+    //                 'loggedIn'     => TRUE
+    //             ];
+
+    //             $remember = $this->request->getVar('remember-me');
+    //             if (isset($remember)) {
+    //                 $nama = 'username';
+    //                 $nilai = $otentik['username'];
+    //                 $durasi = strtotime('+7 days');
+    //                 $path = "/";
+    //                 setcookie($nama, $nilai, $durasi, $path);
+    //             }
+
+    //             session()->set($sesi);
+    //             return redirect()->to('/admin');
+    //         } else {
+    //             session()->setFlashdata('pesan', 'Password salah');
+    //             return redirect()->to('/otentikasi');
+    //         }
+    //     } else {
+    //         session()->setFlashdata('pesan', 'Username tidak terdaftar!');
+    //         return redirect()->to('/otentikasi');
+    //     }
+    // }
+
     public function login()
     {
         $username = $this->request->getVar('username');
         $password = $this->request->getVar('password');
         $otentik = $this->sistemmodel->where(['username' => $username])->first();
         if ($otentik) {
-
             $verifikasi  = password_verify(md5($password), password_hash($otentik['password'], PASSWORD_DEFAULT));
-            if ($verifikasi) {
-                $sesi = [
-                    'username'      => $otentik['username'],
-                    'id_user'      => $otentik['id_user'],
-                    'loggedIn'     => TRUE
-                ];
+            if ($otentik['status'] == 1) {
+                if ($verifikasi) {
+                    $sesi = [
+                        'username'      => $otentik['username'],
+                        'id_user'      => $otentik['id_user'],
+                        'level'         => $otentik['level'],
+                        'nama_lengkap'  => $otentik['nama_lengkap'],
+                        'loggedIn'     => TRUE
+                    ];
 
-                $remember = $this->request->getVar('remember-me');
-                if (isset($remember)) {
-                    $nama = 'username';
-                    $nilai = $otentik['username'];
-                    $durasi = strtotime('+7 days');
-                    $path = "/";
-                    setcookie($nama, $nilai, $durasi, $path);
+                    $remember = $this->request->getVar('remember-me');
+                    if (isset($remember)) {
+                        $nama = 'username';
+                        $nilai = $otentik['username'];
+                        $durasi = strtotime('+7 days');
+                        $path = "/";
+                        setcookie($nama, $nilai, $durasi, $path);
+                    }
+
+                    session()->set($sesi);
+                    return redirect()->to($otentik['level']);
+                } else {
+                    session()->setFlashdata('pesan', 'Password salah');
+                    return redirect()->to('/otentikasi');
                 }
-
-                session()->set($sesi);
-                return redirect()->to('/admin');
             } else {
-                session()->setFlashdata('pesan', 'Password salah');
+                session()->setFlashdata('pesan', 'User '.$username.' belum aktif. Silahkan hubungi Admin');
                 return redirect()->to('/otentikasi');
             }
-        } else {
+        } else{
             session()->setFlashdata('pesan', 'Username tidak terdaftar!');
             return redirect()->to('/otentikasi');
         }
@@ -97,15 +139,17 @@ class Otentikasi extends BaseController
         ]);
 
         if (!$valid) {
-            $alert = [
-                'error' => [
-                    'nama_lengkap' => $validasi->getError('nama_lengkap'),
-                    'username' => $validasi->getError('username'),
-                    'password' => $validasi->getError('password'),
-                    'konfirmasi' => $validasi->getError('konfirmasi'),
-                ]
-            ];
-            return $this->response->setJSON($alert);
+            $alert1 =  $validasi->getError('nama_lengkap');
+            $alert2 =  $validasi->getError('username');
+            $alert3 =  $validasi->getError('password');
+            $alert4 =  $validasi->getError('konfirmasi');
+
+            session()->setFlashdata('eror1', $alert1);
+            session()->setFlashdata('eror2', $alert2);
+            session()->setFlashdata('eror3', $alert3);
+            session()->setFlashdata('eror4', $alert4);
+
+            return redirect()->to('/otentikasi');
         } else {
             if ($this->request->getFile('avatar')->getName() != '') {
                 $avatar = $this->request->getFile('avatar');
@@ -147,5 +191,17 @@ class Otentikasi extends BaseController
             exit('Data tidak dapat diload');
         }
         return $this->response->setJSON($hasil);
+    }
+
+    public function logout()
+    {
+        session()->destroy();
+        $nama = 'username';
+        $nilai = '';
+        $durasi =  strtotime('-7 days');
+        $path = '/';
+        setcookie($nama, $nilai, $durasi, $path);
+        
+        return redirect()->to('/otentikasi');
     }
 }

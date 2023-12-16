@@ -28,6 +28,7 @@
     <link rel="stylesheet" href=<?php echo base_url("css/vertical-layout-light/style.css") ?>>
     <!-- endinject -->
     <link rel="shortcut icon" href=<?php echo base_url("img/logo/uns.png") ?>>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>

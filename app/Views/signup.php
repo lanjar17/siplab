@@ -115,7 +115,7 @@
                             $('#errorkonfirmasi').html('');
                         }
                     } else {
-                        alert(response.alert);
+                        alert(response.sukses);
                         // Swal.fire({
                         //     title: 'Berhasil!',
                         //     text: response.sukses,
@@ -123,6 +123,7 @@
                         //     confirmButtonText: 'Ok'
                         // })
                         $('#daftarmodal').modal('hide');
+                        
                     }
 
                 }

@@ -19,72 +19,8 @@
                 </div>
             </div>
         </div>
-        <table id="datatabel">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Nama</th>
-                    <th>Username</th>
-                    <th>NIP</th>
-                    <th>Level</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
+        <div id="viewdata"></div>
 
-            <tbody>
-                <?php $no = 1; ?>
-                <?php foreach ($user as $u) : ?>
-                    <tr>
-                        <td><?php echo $no++; ?></td>
-                        <td><?php echo $u['nama_lengkap']; ?></td>
-                        <td><?php echo $u['username']; ?></td>
-                        <td><?php echo $u['nip']; ?></td>
-                        <td><?php echo $u['level']; ?></td>
-                        <td>
-                            <button type="button" class="btn btn-danger btn-rounded btn-fw">Hapus</button>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-        <!-- <div class="row pt-4">
-            <div class=" col-sm-12 grid-margin stretch-card">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Default form</h4>
-                        <p class="card-description">
-                            Basic form layout
-                        </p>
-                        <form class="forms-sample">
-                            <div class="form-group">
-                                <label for="exampleInputUsername1">Username</label>
-                                <input type="text" class="form-control" id="exampleInputUsername1" placeholder="Username">
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Email address</label>
-                                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputPassword1">Password</label>
-                                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputConfirmPassword1">Confirm Password</label>
-                                <input type="password" class="form-control" id="exampleInputConfirmPassword1" placeholder="Password">
-                            </div>
-                            <div class="form-check form-check-flat form-check-primary">
-                                <label class="form-check-label">
-                                    <input type="checkbox" class="form-check-input">
-                                    Remember me
-                                </label>
-                            </div>
-                            <button type="submit" class="btn btn-primary me-2">Submit</button>
-                            <button class="btn btn-light">Cancel</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div> -->
 
         <!-- content-wrapper ends -->
 
@@ -97,5 +33,50 @@
 
 <script>
     new DataTable('#datatabel');
+</script>
+
+<script>
+    function tampilkanData() {
+        $.ajax({
+            url: "<?= base_url('/userdata/') ?>",
+            dataType: "json",
+            success: function(response) {
+                $('#viewdata').html('');
+                $('#viewdata').html(response.data);
+            }
+        });
+    }
+
+    function hapus(id_user) {
+        Swal.fire({
+            title: 'Hapus User',
+            text: "Apakah Anda yakin hapus User?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "delete",
+                    url: "<?= base_url('/hapus/') ?>" + id_user,
+                    success: function(response) {
+                        Swal.fire({
+                            title: 'Berhasil!',
+                            text: response.sukses,
+                            icon: 'success',
+                            confirmButtonText: 'Ok'
+                        })
+                        tampilkanData();
+                    }
+                });
+            }
+        })
+    }
+
+    $(document).ready(function() {
+        tampilkanData();
+    });
 </script>
 <?php echo $this->endSection(); ?>

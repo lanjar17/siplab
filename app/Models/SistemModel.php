@@ -15,7 +15,7 @@ class SistemModel extends Model
     protected $allowedFields    = ['nama_lengkap', 'bio', 'username', 'password', 'nip', 'telepon', 'level', 'avatar', 'instansi', 'status'];
 
     // Dates
-    protected $useTimestamps = false;
+    protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
@@ -37,6 +37,20 @@ class SistemModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+
+    //New user belum diterima
+    public function belumDiterima()
+    {
+        return $this->query("SELECT * FROM users WHERE status=0 ORDER BY level")->getResultArray();
+    }
+
+    //Banyak new user belum diterima
+    public function countbelumDiterima()
+    {
+        return $this->query("SELECT count(*) as total FROM users WHERE status=0")->getResult();
+    }
+
 
     public function get_data($table)
     {
