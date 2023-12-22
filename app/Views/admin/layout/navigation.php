@@ -53,7 +53,7 @@
                       </a>
                       <div class="collapse" id="form-elements">
                           <ul class="nav flex-column sub-menu">
-                              <li class="nav-item"><a class="nav-link" href="/peminjam">Peminjaman</a></li>
+                              <li class="nav-item"><a class="nav-link" href="/peminjaman">Peminjaman</a></li>
                               <li class="nav-item"><a class="nav-link" href="/jadwal">Jadwal</a></li>
                           </ul>
                       </div>

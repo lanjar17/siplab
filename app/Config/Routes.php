@@ -28,11 +28,18 @@ $routes->get('/userdata', 'AdminController::getDatauser'); //Ajax newuser
 $routes->delete('/hapus/(:segment)', 'AdminController::deleteuser/$1'); //fungsi hapus user
 
 
-$routes->get('/peminjaman', 'AdminController::peminjaman');
+$routes->get('/peminjaman', 'AdminController::request');
+$routes->get('/requestdata', 'AdminController::getDatarequest'); //Ajax request peminjaman
+$routes->put('/terimapeminjaman/(:segment)', 'AdminController::accpeminjaman/$1'); //fungsi terima pinjam
+$routes->delete('/tolakpeminjaman/(:segment)', 'AdminController::disaccpeminjaman/$1'); //fungsi tolak pinjam
+
 $routes->get('/jadwal', 'AdminController::jadwal');
+$routes->get('/jadwaldata', 'AdminController::getDatajadwal');
 
 
 
-// User Panel
-
+// Member Panel
 $routes->get('/Peminjam', 'MemberController::index');
+$routes->get('/formpinjam', 'MemberController::formpinjam'); //tampil form pinjam
+$routes->get('/jadwalpeminjaman', 'MemberController::jadwalpeminjaman'); //tampil Jadwal
+

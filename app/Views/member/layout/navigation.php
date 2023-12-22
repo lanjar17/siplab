@@ -4,13 +4,13 @@
           <nav class="sidebar sidebar-offcanvas" id="sidebar">
               <ul class="nav">
                   <li class="nav-item">
-                      <a class="nav-link" href="/admin">
+                      <a class="nav-link" href="/Peminjam">
                           <i class="mdi mdi-grid-large menu-icon"></i>
                           <span class="menu-title">Dashboard</span>
                       </a>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link" href="/jadwal">
+                      <a class="nav-link" href="/jadwalpeminjaman">
                           <i class="mdi mdi-calendar-clock menu-icon"></i>
                           <span class="menu-title">Jadwal</span>
                       </a>
