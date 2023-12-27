@@ -12,7 +12,7 @@ class JadwalModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = ['id_jadwal', 'id_peminjaman', 'status_jadwal'];
 
     // Dates
     protected $useTimestamps = false;
@@ -47,5 +47,15 @@ class JadwalModel extends Model
     public function hapusJadwal($id_jadwal)
     {
         return $this->query("SELECT * FROM jadwal INNER JOIN peminjaman ON jadwal.id_peminjaman=peminjaman.id_peminjaman AND id_jadwal=' . $id_jadwal")->getResultArray();
+    }
+
+    public function cektersedia()
+    {
+        return $this->query("SELECT * FROM jadwal INNER JOIN peminjaman, ruangan WHERE jadwal.id_peminjaman=peminjaman.id_peminjaman AND peminjaman.id_ruangan=ruangan.id_ruangan AND jadwal.status_jadwal=1 AND ruangan.id_ruangan='")->getRessult();
+    }
+
+    public function cektersedia2()
+    {
+        return $this->query("SELECT * FROM jadwal INNER JOIN peminjaman, ruangan WHERE jadwal.id_peminjaman=peminjaman.id_peminjaman AND peminjaman.id_ruangan=ruangan.id_ruangan AND jadwal.status_jadwal=2 AND ruangan.id_ruangan='")->getRessult();
     }
 }

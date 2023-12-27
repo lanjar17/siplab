@@ -14,16 +14,21 @@
 
                     <div class="form-group mb-3">
                         <label for="nama_lengkap">Username</label>
-                        <input type="text" name="username" class="form-control form-control-md" id="username" placeholder="">
+                        <input type="text" name="username" class="form-control form-control-md" id="username" placeholder="" readonly value="<?= $user ?>">
                         <div class="invalid-feedback" id="errornama_lengkap"></div>
                     </div>
-                    
-                        <div class="form-group mb-3">
-                            <label for="nip">Ruangan</label>
-                            <!-- <input type="text" name="nip" class="form-control form-control-md" id="nip" placeholder="NIM"> -->
-                            <option value="<?= $id_ruangan ?>"><?= $kode_ruangan ?> - <?= $rnama_ruangan ?>></option>
-                        </div>
-                    
+
+                    <div class="form-group mb-3">
+                        <label>Ruangan</label>
+                        <!-- <input type="text" name="nip" class="form-control form-control-md" id="nip" placeholder="NIM"> -->
+                        <select id="id_ruangan" name="id_ruangan" class="form-control">
+                            <?php foreach ($ruang as $r) { ?>
+                                <option value="<?= $r['id_ruangan'] ?>"><?= $r['kode_ruangan'] ?> - <?= $r['nama_ruangan'] ?></option>
+                            <?php } ?>
+                        </select>
+
+                    </div>
+
                     <div class="form-group mb-3">
                         <label for="telepon">Jam Mulai</label>
                         <input type="text" name="telepon" class="form-control form-control-md" id="telepon" value="<?php $time = new DateTime(date('H:i'));
@@ -50,6 +55,10 @@
                             <option value="Non-UNS">Non UNS</option>
                         </select>
                         <!-- <input type="text" name="instansi" class="form-control form-control-md" id="instansi" placeholder="Instansi"> -->
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="avatar">Bukti Pembayaran</label>
+                        <input type="file" name="avatar" class="form-control form-control-lg" id="avatar" placeholder="Bukti Pembayaran">
                     </div>
 
                     <div class="modal-footer d-flex justify-content-center">

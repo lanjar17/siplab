@@ -21,9 +21,12 @@
                                         <!-- <i class="mdi mdi-monitor icon-lg"></i> -->
                                         <div class="list align-items-center pt-3">
                                             <div class="wrapper w-100">
+                                                
+                                                
                                                 <center>
+                                                    
                                                     <p class="mb-0">
-                                                        <a href="#" id="pinjam" onclick="formpinjam()" class="btn btn-success">Pinjam Ruangan</a>
+                                                        <a href="#" onclick="formpinjam(<?= $r['id_ruangan'] ?>)" class="btn btn-success">Pinjam Ruangan</a>
                                                     </p>
                                                 </center>
                                             </div>
@@ -43,9 +46,9 @@
 </div>
 
 <script>
-    function formpinjam() {
+    function formpinjam(id_ruangan) {
         $.ajax({
-            url: "<?= base_url('/formpinjam/') ?>",
+            url: "<?= base_url('/formpinjam/') ?>/" + id_ruangan,
             dataType: "json",
             success: function(response) {
                 $('#viewmodal').html(response.data).show();

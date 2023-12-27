@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class RuanganModel extends Model
+class PeminjamanModel extends Model
 {
-    protected $table            = 'ruangans';
-    protected $primaryKey       = 'id_ruangan';
+    protected $table            = 'peminjaman';
+    protected $primaryKey       = 'id_peminjaman';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = ['id_peminjaman', 'id_user', 'id_ruangan', 'jam_mulai', 'jam_berakhir', 'tanggal', 'keterangan', 'status_peminjaman'];
 
     // Dates
     protected $useTimestamps = false;
@@ -37,9 +37,4 @@ class RuanganModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
-
-    public function getruangan()
-    {
-        return $this->query("SELECT * FROM ruangans WHERE status_ruangan='Nganggur'")->getResultArray();
-    }
 }

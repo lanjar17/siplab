@@ -9,6 +9,7 @@ use App\Models\JadwalModel;
 use App\Models\RuanganModel;
 
 
+
 class MemberController extends BaseController
 {
 
@@ -16,6 +17,8 @@ class MemberController extends BaseController
     protected $jadwalmodel;
     protected $membermodel;
     protected $ruanganmodel;
+    private $session = null;
+
     public function __construct()
     {
         $this->sistemmodel = new SistemModel();
@@ -27,24 +30,33 @@ class MemberController extends BaseController
 
     public function index()
     {
+        $this->session = session();
+        $nama = $this->session->get('nama_lengkap');
+        $username = $this->session->get('username');
         $data = [
             'ruangan' => $this->ruanganmodel->findAll(),
             'user' => $this->sistemmodel->findAll(),
             'ruangan2' => $this->ruanganmodel->getruangan(),
+            'nama' => $nama,
+            'username' => $username
         ];
         return view('member/dashboard', $data);
     }
 
-    public function formpinjam()
+
+    public function formpinjam($id_ruangan)
     {
+
         if ($this->request->isAjax()) {
-            $item = $this->ruanganmodel->getruangan();
-            
+            $this->session = session();
+            $item = $this->ruanganmodel->getruangan($id_ruangan);
+            $member = $this->session->get('username');
             $data = [
-                'username' => $item['username'],
-                'id_ruangan' => $item['id_ruangan'],
-                'kode' => $item['kode'],
-                'nama_ruangan' => $item['nama_ruangan'],
+                'ruang' => $item,
+                'user' => $member
+                // 'id_ruangan' => $item['id_ruangan'],
+                // 'kode' => $item['kode'],
+                // 'nama_ruangan' => $item['nama_ruangan'],
 
             ];
             $hasil = [
@@ -58,10 +70,137 @@ class MemberController extends BaseController
 
     public function jadwalpeminjaman()
     {
+        $this->session = session();
+        $nama = $this->session->get('nama_lengkap');
+        $username = $this->session->get('username');
         $data = [
             'user' => $this->sistemmodel->jadwal(),
+            'nama'  => $nama,
+            'username' => $username
         ];
         return view('member/jadwalpeminjaman', $data);
+    }
+
+    public function profil()
+    {
+        $this->session = session();
+        $nama = $this->session->get('nama_lengkap');
+        $username = $this->session->get('username');
+        $id = $this->session->get('id_user');
+        $data = [
+            'nama'  => $nama,
+            'username' => $username,
+            'id_user' => $id
+        ];
+        return view('member/profil', $data);
+    }
+
+    public function profilUser($id_user)
+    {
+
+        $this->session = session();
+        $nama = $this->session->get('nama_lengkap');
+        $username = $this->session->get('username');
+        $user = $this->sistemmodel->find($id_user);
+        $data = [
+
+            'nama'  => $nama,
+            'username' => $username,
+            'item' => $user
+        ];
+        return view('member/profilpeminjam', $data);
+    }
+
+    // public function profilUserdata($id_user)
+    // {
+    //     if ($this->request->isAjax()) {
+    //         $this->session = session();
+    //         $nama = $this->session->get('nama_lengkap');
+    //         $username = $this->session->get('username');
+    //         $user = $this->sistemmodel->find($id_user);
+    //         $data = [
+
+    //             'nama'  => $nama,
+    //             'username' => $username,
+    //             'item' => $user
+    //         ];
+    //         $hasil = [
+    //             'data' => view('member/profildata', $data),
+    //         ];
+    //     } else {
+    //         exit('Data tidak dapat diload');
+    //     }
+    //     return $this->response->setJSON($hasil);
+    // }
+
+    public function editprofil($id_user)
+    {
+        if ($this->request->isAJAX()) {
+            $item = $this->sistemmodel->find($id_user);
+            $data = [
+                'id_user' => $item['id_user'],
+                'nama_lengkap' => $item['nama_lengkap'],
+                'nip' => $item['nip'],
+                'telepon' => $item['telepon'],
+                'avatar' => $item['avatar']
+            ];
+            $hasil = [
+                'data' => view('member/profilpeminjamedit', $data)
+            ];
+            return $this->response->setJSON($hasil);
+        } else {
+            exit('data tidak dapat diload');
+        }
+    }
+
+    public function updateprofil($id_user)
+    {
+        $validasi = \Config\Services::validation();
+        $valid = $this->validate([
+            'nama_lengkap' => [
+                'label' => 'Nama Lengkap',
+                'rules' => 'required|min_length[3]',
+                'errors' => [
+                    'required' => '{field} tidak boleh kosong',
+                    'min_length' => '{field} minimal 3 karakter'
+                ]
+            ]
+        ]);
+        if (!$valid) {
+            // $pesan = [
+            //     'error' => [
+            //         'nama_lengkap' => $validasi->getError('nama_lengkap'),
+            //     ]
+            // ];
+            // session()->setFlashdata('yes', $pesan);
+            $alert1 =  $validasi->getError('nama_lengkap');
+            session()->setFlashdata('eror1', $alert1);
+            return redirect()->to('/profiluser/' . $id_user);
+        } else {
+            $nama = $this->request->getVar('nama_lengkap');
+            if ($this->request->getFile('avatar')->getName() != '') {
+                $avatar = $this->request->getFile('avatar');
+                $namaavatar = $avatar->getRandomName();
+                $avatar->move(ROOTPATH . 'public/img/avatar', $namaavatar);
+            } else {
+                $namaavatar = $this->request->getVar('avalama');
+            }
+
+            $input = [
+                'id_user' => $id_user,
+                'nama_lengkap' => $nama,
+                'nip' => $this->request->getVar('nip'),
+                'telepon' => $this->request->getVar('telepon'),
+                'avatar' => $namaavatar
+            ];
+            $this->sistemmodel->save($input);
+            session()->setFlashdata('yes', 'Profil berhasil diupdate');
+            return redirect()->to('/profiluser/'.$id_user);
+            // $pesan = [
+            //     'sukses' => 'Profil berhasil diupdate, silahkan refresh'
+            // ];
+            // return $this->response->setJSON($pesan);
+        }
     }
 
     // public function jadwalpeminjaman()
@@ -77,6 +216,6 @@ class MemberController extends BaseController
     //     // echo json_encode($hasil);
     //     return $this->response->setJSON($hasil);
     //     }
-        
+
 
 }

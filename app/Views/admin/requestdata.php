@@ -29,8 +29,8 @@
 
 
                 <td>
-                    <a href="#" class="btn btn-success btn-rounded btn-fw" id="update" onclick="accrequest(<?php echo $u['id_user'] ?>)">Terima</a>
-                    <a href="#" class="btn btn-danger btn-rounded btn-fw" id="delete" onclick="disaccrequest(<?php echo $u['id_user'] ?>)">Tolak</a>
+                    <a href="#" class="btn btn-success btn-rounded btn-fw" id="update" onclick="accrequest(<?= $u['id_peminjaman'] ?>)">Terima</a>
+                    <a href="#" class="btn btn-danger btn-rounded btn-fw" id="delete" onclick="disaccrequest(<?= $u['id_peminjaman'] ?>)">Tolak</a>
                 </td>
             </tr>
         <?php endforeach; ?>

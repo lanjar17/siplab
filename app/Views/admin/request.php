@@ -47,7 +47,7 @@
         });
     }
 
-    function accrequest(id_user) {
+    function accrequest(id_peminjaman) {
         Swal.fire({
             title: 'Terima Peminjaman Ruangan',
             text: "Apakah Anda yakin menerima Peminjaman?",
@@ -60,7 +60,7 @@
             if (result.isConfirmed) {
                 $.ajax({
                     type: "put",
-                    url: "<?= base_url('/terima/') ?>" + id_user,
+                    url: "<?= base_url('/terimapeminjaman/') ?>" + id_peminjaman,
                     success: function(response) {
                         Swal.fire({
                             title: 'Berhasil!',
@@ -75,7 +75,7 @@
         })
     }
 
-    function disaccrequest(id_user) {
+    function disaccrequest(id_peminjaman) {
         Swal.fire({
             title: 'Tolak Peminjaman Ruangan',
             text: "Apakah Anda yakin menolak Peminjaman?",
@@ -88,7 +88,7 @@
             if (result.isConfirmed) {
                 $.ajax({
                     type: "delete",
-                    url: "<?= base_url('/tolak/') ?>" + id_user,
+                    url: "<?= base_url('/tolakpeminjaman/') ?>" + id_peminjaman,
                     success: function(response) {
                         Swal.fire({
                             title: 'Berhasil!',

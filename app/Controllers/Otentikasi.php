@@ -68,6 +68,7 @@ class Otentikasi extends BaseController
                         'id_user'      => $otentik['id_user'],
                         'level'         => $otentik['level'],
                         'nama_lengkap'  => $otentik['nama_lengkap'],
+                        'avatar'        => $otentik['avatar'],
                         'loggedIn'     => TRUE
                     ];
 
@@ -202,6 +203,6 @@ class Otentikasi extends BaseController
         $path = '/';
         setcookie($nama, $nilai, $durasi, $path);
         
-        return redirect()->to('/otentikasi');
+        return redirect()->to('/');
     }
 }

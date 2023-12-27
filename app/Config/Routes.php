@@ -6,17 +6,17 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 
-$routes->get('/', 'Guest\Guest::index');
+$routes->get('/', 'Guest\Guest::index', ['filter' => 'noauth']);
 
 //LOGIN
-$routes->get('/otentikasi', 'Otentikasi::index'); //halaman login
+$routes->get('/otentikasi', 'Otentikasi::index', ['filter' => 'logauth']); //halaman login
 $routes->get('/signup', 'Otentikasi::signup'); //form signup
 $routes->post('/masuk', 'Otentikasi::login'); //fungsi login
 $routes->post('/daftar', 'Otentikasi::daftar'); //fungsi daftar member
 $routes->get('/keluar', 'Otentikasi::logout'); //fungsi logout
 
 //Admin Panel
-$routes->get('/Admin', 'AdminController::index');
+$routes->get('/Admin', 'AdminController::index', ['filter' => 'auth']);
 
 $routes->get('/newuser', 'AdminController::newuser');
 $routes->get('/newuserdata', 'AdminController::getDatanewuser'); //Ajax newuser
@@ -39,7 +39,12 @@ $routes->get('/jadwaldata', 'AdminController::getDatajadwal');
 
 
 // Member Panel
-$routes->get('/Peminjam', 'MemberController::index');
-$routes->get('/formpinjam', 'MemberController::formpinjam'); //tampil form pinjam
+$routes->get('/Peminjam', 'MemberController::index', ['filter' => 'auth']);
+$routes->get('/formpinjam/(:segment)', 'MemberController::formpinjam/$1'); //tampil form pinjam
 $routes->get('/jadwalpeminjaman', 'MemberController::jadwalpeminjaman'); //tampil Jadwal
+$routes->get('/profilpeminjam', 'MemberController::profil'); //halaman profil
+$routes->get('/profiluser/(:segment)', 'MemberController::profilUser/$1'); //halaman panel detail user
+$routes->get('/profildata/(:segment)', 'MemberController::profilUserdata/$1'); //data detail user
+$routes->get('/editprofil/(:segment)', 'MemberController::editprofil/$1'); // tampil form edit user
+$routes->put('/editprofil/updateprofil/(:segment)', 'MemberController::updateprofil/$1'); //fungsi ubah user
 

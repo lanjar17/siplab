@@ -27,6 +27,10 @@ class Filters extends BaseConfig
         'invalidchars'  => InvalidChars::class,
         'secureheaders' => SecureHeaders::class,
         'cors'          => Cors::class,
+        'auth'          => \App\Filters\Auth::class,
+        'noauth'        => \App\Filters\NoAuth::class,
+        'logauth'        => \App\Filters\LogAuth::class,
+        'memberauth'        => \App\Filters\MemberAuth::class
     ];
 
     /**
