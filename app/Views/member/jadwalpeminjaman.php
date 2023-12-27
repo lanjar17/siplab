@@ -41,7 +41,6 @@ function aturjadwal($nowtime, $dbstart, $dbend, $id_jadwal)
                     <th>Tanggal</th>
                     <th>Keterangan</th>
                     <th>Status</th>
-                    <th>Aksi</th>
                 </tr>
             </thead>
 
@@ -68,7 +67,7 @@ function aturjadwal($nowtime, $dbstart, $dbend, $id_jadwal)
                                     echo "<span class='text-primary text-bold'>Akan datang...</span>";
                                     break;
                                 case 3:
-                                    echo "<span class='text-danger text-bold'>Sudah lewat, harap hapus jadwal ini..</span>";
+                                    echo "<span class='text-danger text-bold'>Sudah lewat</span>";
                                 default:
                                     # code...
                                     break;
@@ -77,9 +76,7 @@ function aturjadwal($nowtime, $dbstart, $dbend, $id_jadwal)
                         </td>
 
 
-                        <td>
-                            <a href="#" class="btn btn-danger btn-rounded btn-fw" id="delete" onclick="disaccuser(<?php echo $u['id_user'] ?>)">Hapus Jadwal</a>
-                        </td>
+                        
                     </tr>
                 <?php endforeach; ?>
             </tbody>

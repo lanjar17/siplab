@@ -76,21 +76,18 @@ class MemberController extends BaseController
 
     public function pinjam()
     {
-        
-            $input = [
-                'id_peminjam' => NULL,
-                'id_user' => $this->request->getVar('id_user'),
-                'id_ruangan' => $this->request->getVar('id_ruangan'),
-                'jam_mulai' => $this->request->getVar('jam_mulai'),
-                'jam_berakhir' => $this->request->getVar('jam_berakhir'),
-                'tanggal' => $this->request->getVar('tanggal'),
-            ];
-            $this->peminjamanmodel->save($input);
-            $pesan = [
-                'sukses' => 'Berhasil meminjam, silahkan tunggu disetujui admin'
-            ];
-            return $this->response->setJSON($pesan);
-        
+
+        $input = [
+            'id_peminjam' => NULL,
+            'id_user' => $this->request->getVar('id_user'),
+            'id_ruangan' => $this->request->getVar('id_ruangan'),
+            'jam_mulai' => $this->request->getVar('jam_mulai'),
+            'jam_berakhir' => $this->request->getVar('jam_berakhir'),
+            'tanggal' => $this->request->getVar('tanggal'),
+        ];
+        $this->peminjamanmodel->save($input);
+        session()->setFlashdata('ahai', 'Berhasil meminjam, silahkan tunggu disetujui admin');
+        return redirect()->to('Peminjam');
     }
 
     public function jadwalpeminjaman()

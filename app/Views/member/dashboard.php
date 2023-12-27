@@ -5,6 +5,11 @@
 <div class="main-panel">
     <div id="viewmodal"></div>
     <div class="content-wrapper">
+        <?php if (session()->getFlashdata('ahai') != '') { ?>
+            <div class="alert alert-success" role="success">
+                <?= session()->getFlashdata('ahai'); ?>
+            </div>
+        <?php } ?>
 
         <div class="row">
             <?php foreach ($ruangan as $r) : ?>

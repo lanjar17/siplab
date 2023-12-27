@@ -22,7 +22,7 @@
                     <div class="form-group mb-3">
                         <label>Ruangan</label>
                         <!-- <input type="text" name="nip" class="form-control form-control-md" id="nip" placeholder="NIM"> -->
-                        <select id="id_ruangan" name="id_ruangan" class="form-control" disabled>
+                        <select id="id_ruangan" name="id_ruangan" class="form-control">
                             <?php foreach ($ruang as $r) { ?>
                                 <option value="<?= $r['id_ruangan'] ?>"><?= $r['kode_ruangan'] ?> - <?= $r['nama_ruangan'] ?></option>
                             <?php } ?>
