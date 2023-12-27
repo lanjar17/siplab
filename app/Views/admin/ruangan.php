@@ -1,4 +1,4 @@
-<?php echo $this->extend('member/layout/main'); ?>
+<?php echo $this->extend('admin/layout/main'); ?>
 
 <?php echo $this->section('container'); ?>
 
@@ -21,21 +21,32 @@
                                     <div class="align-items-center justify-content-between mb-2 text-center">
                                         <h4 class="card-title card-title-dash"><?php echo $r['nama_ruangan']; ?></h4>
                                     </div>
-                                    <div class="card-body text-center">
-                                        <img src="<?= base_url('img/logo/' . $r['image']) ?>" alt="" width="200px">
-                                        <!-- <i class="mdi mdi-monitor icon-lg"></i> -->
-                                        <div class="list align-items-center pt-3">
-                                            <div class="wrapper w-100">
-                                                
-                                                        <center>
-
-                                                            <p class="mb-0">
-                                                                <a href="#" onclick="formpinjam(<?= $r['id_ruangan'] ?>)" class="btn btn-success">Pinjam Ruangan</a>
-                                                            </p>
-                                                        </center>
-                                                    
-                                            </div>
+                                    <div class="card-body">
+                                        <div class="image text-center">
+                                            <img src="<?= base_url('img/logo/' . $r['image']) ?>" alt="" width="200px">
                                         </div>
+
+                                        <!-- <i class="mdi mdi-monitor icon-lg"></i> -->
+                                        <table class="table">
+                                            <tbody>
+                                                <tr>
+                                                    <th class="card-title card-title-dash">Kode</th>
+                                                    <td>:</td>
+                                                    <td><?php echo $r['kode_ruangan'] ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="card-title card-title-dash">Nama</th>
+                                                    <td>:</td>
+                                                    <td><?php echo $r['nama_ruangan'] ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3" class="text-center">
+                                                        <a href="#" onclick="ubahruangan(<?= $r['id_ruangan'] ?>)" class="btn btn-success">Ubah Ruangan</a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -51,13 +62,13 @@
 </div>
 
 <script>
-    function formpinjam(id_ruangan) {
+    function ubahruangan(id_ruangan) {
         $.ajax({
-            url: "<?= base_url('/formpinjam/') ?>/" + id_ruangan,
+            url: "<?= base_url('/ubahruangan/') ?>" + id_ruangan,
             dataType: "json",
             success: function(response) {
                 $('#viewmodal').html(response.data).show();
-                $('#pinjammodal').modal('show');
+                $('#ubahruanganmodal').modal('show');
                 // Set nilai opsi ruangan yang dipilih secara otomatis
                 $('#id_ruangan').val(id_ruangan); // Mengatur nilai opsi yang dipilih
             }

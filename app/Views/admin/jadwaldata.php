@@ -47,7 +47,7 @@
 
 
                 <td>
-                    <a href="#" class="btn btn-danger btn-rounded btn-fw" id="delete" onclick="disaccuser(<?php echo $u['id_user'] ?>)">Hapus Jadwal</a>
+                    <a href="#" class="btn btn-danger btn-rounded btn-fw" id="delete" onclick="hapusJadwal(<?php echo $u['id_jadwal'] ?>)">Hapus Jadwal</a>
                 </td>
             </tr>
         <?php endforeach; ?>

@@ -189,10 +189,10 @@ class AdminController extends BaseController
         $dbend = strtotime($cekpeminjaman['jam_berakhir']) + strtotime($cekpeminjaman['tanggal']);
         if ($nowtime >= $dbstart and $nowtime <= $dbend) {
             $ruangan = $cekpeminjaman['id_ruangan'];
-            $cek = $this->jadwalmodel->cektersedia();
-            $cekjadwal = $this->jadwalmodel->query('SELECT * FROM jadwal INNER JOIN peminjaman, ruangan 
+            $cek = $this->jadwalmodel->cektersedia($id_peminjaman);
+            $cekjadwal = $this->jadwalmodel->query('SELECT * FROM jadwal INNER JOIN peminjaman, ruangans 
 			WHERE jadwal.id_peminjaman=peminjaman.id_peminjaman
-			AND peminjaman.id_ruangan=ruangan.id_ruangan
+			AND peminjaman.id_ruangan=ruangans.id_ruangan
 			AND status_jadwal=1
 			AND peminjaman.id_ruangan=' . $ruangan)->getResultArray();
             // $cekjadwal = $cek . $ruangan;
@@ -232,9 +232,9 @@ class AdminController extends BaseController
             $ruangan = $cekpeminjaman['id_ruangan'];
             // $cek = $this->jadwalmodel->cektersedia2();
             // $cekjadwal = $cek . $ruangan;
-            $cekjadwal = $this->jadwalmodel->query('SELECT * FROM jadwal INNER JOIN peminjaman, ruangan 
+            $cekjadwal = $this->jadwalmodel->query('SELECT * FROM jadwal INNER JOIN peminjaman, ruangans 
 			WHERE jadwal.id_peminjaman=peminjaman.id_peminjaman
-			AND peminjaman.id_ruangan=ruangan.id_ruangan
+			AND peminjaman.id_ruangan=ruangans.id_ruangan
 			AND status_jadwal=2
 			AND peminjaman.id_ruangan=' . $ruangan)->getResultArray();
 
@@ -333,7 +333,7 @@ class AdminController extends BaseController
         $this->session = session();
         $nama = $this->session->get('nama_lengkap');
         $data = [
-            'user' => $this->sistemmodel->jadwal(),
+            'user' => $this->jadwalmodel->jadwal(),
             'count' => $this->sistemmodel->countbelumDiterima(),
             'nama'  => $nama
         ];
@@ -345,7 +345,7 @@ class AdminController extends BaseController
         if ($this->request->isAJAX()) {
 
             $data = [
-                'user' => $this->sistemmodel->jadwal(),
+                'user' => $this->jadwalmodel->jadwal(),
             ];
             $hasil = [
                 'data' => view('admin/jadwaldata', $data)
@@ -355,6 +355,17 @@ class AdminController extends BaseController
             exit('Data tidak dapat diakses :p');
         }
         return $this->response->setJSON($hasil);
+    }
+
+    public function hapusjadwal($id_jadwal)
+    {
+        if ($this->request->isAjax()) {
+            $this->jadwalmodel->delete($id_jadwal);
+            $pesan = ['sukses' => "Jadwal Dihapus"];
+        } else {
+            exit('tidak dapat memproses data');
+        }
+        return $this->response->setJSON($pesan);
     }
 
     // public function aturJadwal($aksi, $id_jadwal)
@@ -393,6 +404,45 @@ class AdminController extends BaseController
 
 
 
+    public function ruangan()
+    {
+        $this->session = session();
+        $nama = $this->session->get('nama_lengkap');
+        $username = $this->session->get('username');
+        $id_user = $this->session->get('id_user');
+        $data = [
+            'ruangan' => $this->ruanganmodel->findAll(),
+            'nama' => $nama,
+            'username' => $username,
+            'count' => $this->sistemmodel->countbelumDiterima(),
+        ];
+        return view('admin/ruangan', $data);
+    }
+
+    public function ubahruangan($id_ruangan)
+    {
+
+        if ($this->request->isAjax()) {
+            $this->session = session();
+            $item = $this->ruanganmodel->find($id_ruangan);
+            $member = $this->session->get('username');
+            $data = [
+                'id_ruangan'    => $item['id_ruangan'],
+                'kode_ruangan' => $item['kode_ruangan'],
+                'nama_ruangan' => $item['nama_ruangan'],
+                // 'id_ruangan' => $item['id_ruangan'],
+                // 'kode' => $item['kode'],
+                // 'nama_ruangan' => $item['nama_ruangan'],
+
+            ];
+            $hasil = [
+                'data' => view('admin/ubahruangan', $data),
+            ];
+        } else {
+            exit('Data tidak dapat diload');
+        }
+        return $this->response->setJSON($hasil);
+    }
 
 
 }

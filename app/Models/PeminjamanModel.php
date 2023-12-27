@@ -37,4 +37,17 @@ class PeminjamanModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function cekUser($id_user, $id_ruangan)
+    {
+        $builder = $this->db->table('peminjaman');
+        $builder->select('peminjaman.*');
+        $builder->join('ruangan', 'peminjaman.id_ruangan = ruangan.id_ruangan');
+        $builder->where('peminjaman.id_user', $id_user);
+        $builder->where('ruangan.id_ruangan', $id_ruangan);
+        $builder->where('peminjaman.status_peminjaman', 0);
+
+        $query = $builder->get();
+
+        return $query->getResultArray();}
 }

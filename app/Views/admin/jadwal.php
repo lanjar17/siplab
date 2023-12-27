@@ -9,7 +9,6 @@ function aturjadwal($nowtime, $dbstart, $dbend, $id_jadwal)
     }
 }
 ?>
-?>
 
 <div class="main-panel">
     <div class="content-wrapper">
@@ -56,38 +55,10 @@ function aturjadwal($nowtime, $dbstart, $dbend, $id_jadwal)
         });
     }
 
-    function accuser(id_user) {
-        Swal.fire({
-            title: 'Terima User',
-            text: "Apakah Anda yakin menerima User?",
-            icon: 'success',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, terima'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    type: "put",
-                    url: "<?= base_url('/terima/') ?>" + id_user,
-                    success: function(response) {
-                        Swal.fire({
-                            title: 'Berhasil!',
-                            text: response.sukses,
-                            icon: 'success',
-                            confirmButtonText: 'Ok'
-                        })
-                        tampilkanJadwal();
-                    }
-                });
-            }
-        })
-    }
-
-    function disaccuser(id_user) {
+    function hapusJadwal(id_jadwal) {
         Swal.fire({
             title: 'Tolak User',
-            text: "Apakah Anda yakin menolak User?",
+            text: "Apakah Anda menghapus Jadwal?",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -97,7 +68,7 @@ function aturjadwal($nowtime, $dbstart, $dbend, $id_jadwal)
             if (result.isConfirmed) {
                 $.ajax({
                     type: "delete",
-                    url: "<?= base_url('/tolak/') ?>" + id_user,
+                    url: "<?= base_url('/hapusjadwal/') ?>" + id_jadwal,
                     success: function(response) {
                         Swal.fire({
                             title: 'Berhasil!',

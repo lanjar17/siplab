@@ -30,12 +30,15 @@ $routes->delete('/hapus/(:segment)', 'AdminController::deleteuser/$1'); //fungsi
 
 $routes->get('/peminjaman', 'AdminController::request');
 $routes->get('/requestdata', 'AdminController::getDatarequest'); //Ajax request peminjaman
-$routes->put('/terimapeminjaman/(:segment)', 'AdminController::accpeminjaman/$1'); //fungsi terima pinjam
+$routes->post('/terimapeminjaman/(:any)', 'AdminController::accpeminjaman/$1'); //fungsi terima pinjam
 $routes->delete('/tolakpeminjaman/(:segment)', 'AdminController::disaccpeminjaman/$1'); //fungsi tolak pinjam
 
 $routes->get('/jadwal', 'AdminController::jadwal');
 $routes->get('/jadwaldata', 'AdminController::getDatajadwal');
+$routes->delete('/hapusjadwal/(:segment)', 'AdminController::hapusjadwal/$1');
 
+$routes->get('/ruangan', 'AdminController::ruangan');
+$routes->get('/ubahruangan/(:segment)', 'AdminController::ubahruangan/$1');
 
 
 // Member Panel

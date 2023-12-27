@@ -41,7 +41,7 @@ class JadwalModel extends Model
 
     public function jadwal()
     {
-        return $this->query("SELECT * FROM jadwal INNER JOIN peminjaman on jadwal.id_peminjaman=peminjaman.id_peminjaman INNER JOIN users on peminjaman.id_user=users.id_user INNER JOIN ruangan on peminjaman.id_ruangan = ruangan.id_ruangan AND status_jadwal!=3")->getResultArray();
+        return $this->query("SELECT * FROM jadwal INNER JOIN peminjaman, ruangans, users WHERE jadwal.id_peminjaman=peminjaman.id_peminjaman AND peminjaman.id_ruangan=ruangans.id_ruangan AND peminjaman.id_user=users.id_user AND peminjaman.status_peminjaman!=0")->getResultArray();
     }
 
     public function hapusJadwal($id_jadwal)
@@ -49,13 +49,27 @@ class JadwalModel extends Model
         return $this->query("SELECT * FROM jadwal INNER JOIN peminjaman ON jadwal.id_peminjaman=peminjaman.id_peminjaman AND id_jadwal=' . $id_jadwal")->getResultArray();
     }
 
-    public function cektersedia()
+    // public function cektersedia()
+    // {
+    //     return $this->query("SELECT * FROM jadwal INNER JOIN peminjaman, ruangan WHERE jadwal.id_peminjaman=peminjaman.id_peminjaman AND peminjaman.id_ruangan=ruangan.id_ruangan AND jadwal.status_jadwal=1 AND ruangan.id_ruangan=")->getResultArray();
+    // }
+
+    public function cekTersedia($id_ruangan)
     {
-        return $this->query("SELECT * FROM jadwal INNER JOIN peminjaman, ruangan WHERE jadwal.id_peminjaman=peminjaman.id_peminjaman AND peminjaman.id_ruangan=ruangan.id_ruangan AND jadwal.status_jadwal=1 AND ruangan.id_ruangan='")->getRessult();
+        $builder = $this->db->table('jadwal');
+        $builder->select('*');
+        $builder->join('peminjaman', 'jadwal.id_peminjaman = peminjaman.id_peminjaman');
+        $builder->join('ruangan', 'peminjaman.id_ruangan = ruangan.id_ruangan');
+        $builder->where('jadwal.status_jadwal', 1);
+        $builder->where('ruangan.id_ruangan', $id_ruangan);
+
+        $query = $builder->get();
+
+        return $query->getResultArray();
     }
 
     public function cektersedia2()
     {
-        return $this->query("SELECT * FROM jadwal INNER JOIN peminjaman, ruangan WHERE jadwal.id_peminjaman=peminjaman.id_peminjaman AND peminjaman.id_ruangan=ruangan.id_ruangan AND jadwal.status_jadwal=2 AND ruangan.id_ruangan='")->getRessult();
+        return $this->query("SELECT * FROM jadwal INNER JOIN peminjaman, ruangan WHERE jadwal.id_peminjaman=peminjaman.id_peminjaman AND peminjaman.id_ruangan=ruangan.id_ruangan AND jadwal.status_jadwal=2 AND ruangan.id_ruangan='")->getResult();
     }
 }

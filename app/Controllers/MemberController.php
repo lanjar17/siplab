@@ -37,12 +37,15 @@ class MemberController extends BaseController
         $this->session = session();
         $nama = $this->session->get('nama_lengkap');
         $username = $this->session->get('username');
+        $id_user = $this->session->get('id_user');
+        $id_ruangan = ('id_ruangan');
         $data = [
             'ruangan' => $this->ruanganmodel->findAll(),
             'user' => $this->sistemmodel->findAll(),
             'ruangan2' => $this->ruanganmodel->getruangan(),
             'nama' => $nama,
-            'username' => $username
+            'username' => $username,
+            'cek_tersedia' => $this->jadwalmodel->cektersedia($id_ruangan)
         ];
         return view('member/dashboard', $data);
     }

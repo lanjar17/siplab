@@ -4,18 +4,18 @@
           <nav class="sidebar sidebar-offcanvas" id="sidebar">
               <ul class="nav">
                   <li class="nav-item">
-                      <a class="nav-link" href="/Admin">
+                      <a class="nav-link" href="<?php echo base_url('/Admin')?>">
                           <i class="mdi mdi-grid-large menu-icon"></i>
                           <span class="menu-title">Dashboard</span>
                       </a>
                   </li>
                   <li class="nav-item nav-category">User</li>
                   <li class="nav-item">
-                      <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+                      <a class="nav-link" data-bs-toggle="collapse" href="#user" aria-expanded="false" aria-controls="ui-basic">
                           <i class="menu-icon mdi mdi-account-circle-outline"></i>
                           <span class="menu-title">User</span>
                           <?php
-                          
+
                             if ($count[0]->total == 0) {
                             } else { ?>
                               <span class="badge badge-primary">
@@ -24,10 +24,10 @@
                           <?php } ?>
                           <i class="menu-arrow"></i>
                       </a>
-                      <div class="collapse" id="ui-basic">
+                      <div class="collapse" id="user">
                           <ul class="nav flex-column sub-menu">
                               <li class="nav-item">
-                                  <a class="nav-link" href="/newuser">
+                                  <a class="nav-link" href="<?php echo base_url('/newuser')?>">
                                       <p>
                                           Pendaftar &nbsp;&nbsp;&nbsp;
                                           <?php if ($count[0]->total > 0) { ?>
@@ -40,21 +40,21 @@
                               </li>
 
 
-                              <li class="nav-item"> <a class="nav-link" href="/user">Kelola User</a></li>
+                              <li class="nav-item"> <a class="nav-link" href="<?php echo base_url('/user')?>">Kelola User</a></li>
                           </ul>
                       </div>
                   </li>
                   <li class="nav-item nav-category">Forms and Datas</li>
                   <li class="nav-item">
-                      <a class="nav-link" data-bs-toggle="collapse" href="#form-elements" aria-expanded="false" aria-controls="form-elements">
+                      <a class="nav-link" data-bs-toggle="collapse" href="#menu" aria-expanded="false" aria-controls="form-elements">
                           <i class="menu-icon  mdi mdi-bookmark "></i>
                           <span class="menu-title">Kelola Peminjam</span>
                           <i class="menu-arrow"></i>
                       </a>
-                      <div class="collapse" id="form-elements">
+                      <div class="collapse" id="menu">
                           <ul class="nav flex-column sub-menu">
-                              <li class="nav-item"><a class="nav-link" href="/peminjaman">Peminjaman</a></li>
-                              <li class="nav-item"><a class="nav-link" href="/jadwal">Jadwal</a></li>
+                              <li class="nav-item"><a class="nav-link" href="<?php echo base_url('/peminjaman')?>">Peminjaman</a></li>
+                              <li class="nav-item"><a class="nav-link" href="<?php echo base_url('/jadwal')?>">Jadwal</a></li>
                           </ul>
                       </div>
                   </li>
@@ -65,18 +65,17 @@
                       </a>
                   </li>
 
-                  <li class="nav-item nav-category">pages</li>
+                  <li class="nav-item nav-category">Pengaturan</li>
                   <li class="nav-item">
-                      <a class="nav-link" data-bs-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
-                          <i class="menu-icon mdi mdi-settings"></i>
-                          <span class="menu-title">Pengaturan</span>
+                      <a class="nav-link" data-bs-toggle="collapse" href="/pengaturan" aria-expanded="false" aria-controls="auth">
+                          <i class="menu-icon mdi mdi-account-settings "></i>
+                          <span class="menu-title">Profil</span>
                       </a>
                   </li>
-                  <li class="nav-item nav-category">help</li>
                   <li class="nav-item">
-                      <a class="nav-link" data-bs-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
-                          <i class="menu-icon  mdi mdi-help "></i>
-                          <span class="menu-title">Bantuan</span>
+                      <a class="nav-link" href="<?php echo base_url('/ruangan'); ?>" >
+                          <i class="menu-icon mdi mdi-settings"></i>
+                          <span class="menu-title">Ruangan</span>
                       </a>
                   </li>
                   <li class="nav-item">
