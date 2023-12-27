@@ -41,6 +41,8 @@ $routes->get('/jadwaldata', 'AdminController::getDatajadwal');
 // Member Panel
 $routes->get('/Peminjam', 'MemberController::index', ['filter' => 'auth']);
 $routes->get('/formpinjam/(:segment)', 'MemberController::formpinjam/$1'); //tampil form pinjam
+$routes->post('/pinjam', 'MemberController::pinjam'); //pinjam
+
 $routes->get('/jadwalpeminjaman', 'MemberController::jadwalpeminjaman'); //tampil Jadwal
 $routes->get('/profilpeminjam', 'MemberController::profil'); //halaman profil
 $routes->get('/profiluser/(:segment)', 'MemberController::profilUser/$1'); //halaman panel detail user

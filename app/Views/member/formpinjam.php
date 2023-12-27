@@ -10,6 +10,7 @@
             <div class="modal-body mx-3">
 
                 <form class="form-sample" method="POST" action="/pinjam" enctype="multipart/form-data">
+                    <input type="hidden" id="pinjam_id_user" name="id_user" value="<?= $id_user ?>">
                     <?= csrf_field() ?>
 
                     <div class="form-group mb-3">
@@ -21,7 +22,7 @@
                     <div class="form-group mb-3">
                         <label>Ruangan</label>
                         <!-- <input type="text" name="nip" class="form-control form-control-md" id="nip" placeholder="NIM"> -->
-                        <select id="id_ruangan" name="id_ruangan" class="form-control">
+                        <select id="id_ruangan" name="id_ruangan" class="form-control" disabled>
                             <?php foreach ($ruang as $r) { ?>
                                 <option value="<?= $r['id_ruangan'] ?>"><?= $r['kode_ruangan'] ?> - <?= $r['nama_ruangan'] ?></option>
                             <?php } ?>
@@ -30,21 +31,21 @@
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="telepon">Jam Mulai</label>
-                        <input type="text" name="telepon" class="form-control form-control-md" id="telepon" value="<?php $time = new DateTime(date('H:i'));
-                                                                                                                    $time->modify('+1 hours');
-                                                                                                                    echo $time->format('H:i'); ?>">
+                        <label for="jam_mulai">Jam Mulai</label>
+                        <input type="time" name="jam_mulai" class="form-control form-control-md verifydate" id="jam_mulai" value="<?php $time = new DateTime(date('H:i'));
+                                                                                                                                    $time->modify('+1 hours');
+                                                                                                                                    echo $time->format('H:i'); ?>">
                     </div>
                     <div class="form-group mb-3">
-                        <label for="username">Jam Selesai</label>
-                        <input type="text" name="username" class="form-control form-control-md" id="username" value="<?php $time = new DateTime(date('H:i'));
-                                                                                                                        $time->modify('+2 hours');
-                                                                                                                        echo $time->format('H:i'); ?>">
+                        <label for="jam_berakhir">Jam Selesai</label>
+                        <input type="time" name="jam_berakhir" class="form-control form-control-md verifydate" id="jam_berakhir" value="<?php $time = new DateTime(date('H:i'));
+                                                                                                                                    $time->modify('+2 hours');
+                                                                                                                                    echo $time->format('H:i'); ?>">
                         <div class="invalid-feedback" id="errorusername"></div>
                     </div>
                     <div class="form-group mb-3">
-                        <label for="password">Tanggal</label>
-                        <input type="date" name="password" class="form-control form-control-lg" id="password" value="<?php echo date('Y-m-d', time()); ?>">
+                        <label for="tanggal">Tanggal</label>
+                        <input type="date" name="tanggal" class="form-control form-control-lg verifydate" id="tanggal" value="<?php echo date('Y-m-d', time()); ?>">
                         <div class="invalid-feedback" id="errorpassword"></div>
                     </div>
                     <div class="form-group mb-3">
@@ -58,11 +59,11 @@
                     </div>
                     <div class="form-group mb-3">
                         <label for="avatar">Bukti Pembayaran</label>
-                        <input type="file" name="avatar" class="form-control form-control-lg" id="avatar" placeholder="Bukti Pembayaran">
+                        <input type="file" name="bukti" class="form-control form-control-lg" id="bukti" placeholder="Bukti Pembayaran">
                     </div>
 
                     <div class="modal-footer d-flex justify-content-center">
-                        <button class="btn btn-block btn-success btn-md font-weight-medium auth-form-btn" type="submit">Daftar</button>
+                        <button class="btn btn-block btn-success btn-md font-weight-medium auth-form-btn" type="submit" id="submit">Pinjam</button>
                     </div>
 
                 </form>

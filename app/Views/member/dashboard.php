@@ -21,10 +21,10 @@
                                         <!-- <i class="mdi mdi-monitor icon-lg"></i> -->
                                         <div class="list align-items-center pt-3">
                                             <div class="wrapper w-100">
-                                                
-                                                
+
+
                                                 <center>
-                                                    
+
                                                     <p class="mb-0">
                                                         <a href="#" onclick="formpinjam(<?= $r['id_ruangan'] ?>)" class="btn btn-success">Pinjam Ruangan</a>
                                                     </p>
@@ -53,9 +53,34 @@
             success: function(response) {
                 $('#viewmodal').html(response.data).show();
                 $('#pinjammodal').modal('show');
+                // Set nilai opsi ruangan yang dipilih secara otomatis
+                $('#id_ruangan').val(id_ruangan); // Mengatur nilai opsi yang dipilih
             }
         });
 
     };
+
+    $(document).ready(function() {
+        $('#form').submit(function(e) {
+            e.preventDefault();
+            $.ajax({
+                type: $(this).attr('method'),
+                url: $(this).attr('action'),
+                data: new FormData(this),
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    Swal.fire({
+                        title: 'Berhasil!',
+                        text: response.sukses,
+                        icon: 'success',
+                        confirmButtonText: 'Ok'
+                    })
+                    $('#pinjammodal').modal('hide');
+                }
+            });
+        });
+
+    });
 </script>
 <?php echo $this->endSection(); ?>

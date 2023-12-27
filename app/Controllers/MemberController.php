@@ -7,6 +7,8 @@ use App\Models\SistemModel;
 use App\Models\MemberModel;
 use App\Models\JadwalModel;
 use App\Models\RuanganModel;
+use App\Models\PeminjamanModel;
+use CodeIgniter\I18n\Time;
 
 
 
@@ -17,6 +19,7 @@ class MemberController extends BaseController
     protected $jadwalmodel;
     protected $membermodel;
     protected $ruanganmodel;
+    protected $peminjamanmodel;
     private $session = null;
 
     public function __construct()
@@ -25,6 +28,7 @@ class MemberController extends BaseController
         $this->jadwalmodel = new JadwalModel();
         $this->membermodel = new MemberModel();
         $this->ruanganmodel = new RuanganModel();
+        $this->peminjamanmodel = new PeminjamanModel();
     }
 
 
@@ -51,9 +55,11 @@ class MemberController extends BaseController
             $this->session = session();
             $item = $this->ruanganmodel->getruangan($id_ruangan);
             $member = $this->session->get('username');
+            $id_user = $this->session->get('id_user');
             $data = [
                 'ruang' => $item,
-                'user' => $member
+                'user' => $member,
+                'id_user'   => $id_user
                 // 'id_ruangan' => $item['id_ruangan'],
                 // 'kode' => $item['kode'],
                 // 'nama_ruangan' => $item['nama_ruangan'],
@@ -66,6 +72,25 @@ class MemberController extends BaseController
             exit('Data tidak dapat diload');
         }
         return $this->response->setJSON($hasil);
+    }
+
+    public function pinjam()
+    {
+        
+            $input = [
+                'id_peminjam' => NULL,
+                'id_user' => $this->request->getVar('id_user'),
+                'id_ruangan' => $this->request->getVar('id_ruangan'),
+                'jam_mulai' => $this->request->getVar('jam_mulai'),
+                'jam_berakhir' => $this->request->getVar('jam_berakhir'),
+                'tanggal' => $this->request->getVar('tanggal'),
+            ];
+            $this->peminjamanmodel->save($input);
+            $pesan = [
+                'sukses' => 'Berhasil meminjam, silahkan tunggu disetujui admin'
+            ];
+            return $this->response->setJSON($pesan);
+        
     }
 
     public function jadwalpeminjaman()
@@ -195,7 +220,7 @@ class MemberController extends BaseController
             ];
             $this->sistemmodel->save($input);
             session()->setFlashdata('yes', 'Profil berhasil diupdate');
-            return redirect()->to('/profiluser/'.$id_user);
+            return redirect()->to('/profiluser/' . $id_user);
             // $pesan = [
             //     'sukses' => 'Profil berhasil diupdate, silahkan refresh'
             // ];
