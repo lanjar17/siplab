@@ -5,7 +5,7 @@ namespace Config;
 use CodeIgniter\Events\Events;
 use CodeIgniter\Exceptions\FrameworkException;
 use CodeIgniter\HotReloader\HotReloader;
-
+use App\Libraries\VisitorTracker;
 /*
  * --------------------------------------------------------------------
  * Application Events
@@ -52,4 +52,7 @@ Events::on('pre_system', static function () {
             });
         }
     }
+
+    $visitorTracker = new VisitorTracker();
+    Events::on('post_controller_constructor', [$visitorTracker, 'track_visitor']);
 });

@@ -10,6 +10,11 @@
                 <?= session()->getFlashdata('ahai'); ?>
             </div>
         <?php } ?>
+        <?php if (session()->getFlashdata('congrats') != '') { ?>
+            <div class="alert alert-success" role="alert">
+                <?= session()->getFlashdata('congrats'); ?>
+            </div>
+        <?php } ?>
 
         <div class="row">
             <?php foreach ($ruangan as $r) : ?>
@@ -46,7 +51,7 @@
                                                 </tr>
                                             </tbody>
                                         </table>
-                                        
+
                                     </div>
                                 </div>
                             </div>

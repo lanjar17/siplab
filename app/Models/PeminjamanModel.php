@@ -49,5 +49,17 @@ class PeminjamanModel extends Model
 
         $query = $builder->get();
 
-        return $query->getResultArray();}
+        return $query->getResultArray();
+    }
+
+
+    public function countPeminjaman()
+    {
+        return $this->query("SELECT count(*) as total FROM peminjaman")->getResult();
+    }
+
+    public function countreqPeminjaman()
+    {
+        return $this->query("SELECT count(*) as total FROM peminjaman WHERE status_peminjaman=0")->getResult();
+    }
 }

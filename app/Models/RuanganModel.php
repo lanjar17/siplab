@@ -12,7 +12,7 @@ class RuanganModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = ['id_ruangan', 'kode_ruangan','nama_ruangan', 'image', 'status_ruangan'];
 
     // Dates
     protected $useTimestamps = false;
@@ -41,5 +41,10 @@ class RuanganModel extends Model
     public function getruangan()
     {
         return $this->query("SELECT * FROM ruangans WHERE status_ruangan='Nganggur'")->getResultArray();
+    }
+
+    public function countRuangan()
+    {
+        return $this->query("SELECT count(*) as total FROM ruangans")->getResult();
     }
 }

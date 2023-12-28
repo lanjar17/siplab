@@ -44,7 +44,7 @@
                           </ul>
                       </div>
                   </li>
-                  <li class="nav-item nav-category">Forms and Datas</li>
+                  <li class="nav-item nav-category">Peminjaman</li>
                   <li class="nav-item">
                       <a class="nav-link" data-bs-toggle="collapse" href="#menu" aria-expanded="false" aria-controls="form-elements">
                           <i class="menu-icon  mdi mdi-bookmark "></i>
@@ -57,12 +57,6 @@
                               <li class="nav-item"><a class="nav-link" href="<?php echo base_url('/jadwal')?>">Jadwal</a></li>
                           </ul>
                       </div>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link" data-bs-toggle="collapse" href="/" aria-expanded="false" aria-controls="charts">
-                          <i class="menu-icon  mdi mdi-file-pdf "></i>
-                          <span class="menu-title">Laporan</span>
-                      </a>
                   </li>
 
                   <li class="nav-item nav-category">Pengaturan</li>

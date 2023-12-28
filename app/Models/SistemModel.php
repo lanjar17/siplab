@@ -51,6 +51,11 @@ class SistemModel extends Model
         return $this->query("SELECT count(*) as total FROM users WHERE status=0")->getResult();
     }
 
+    public function countUser()
+    {
+        return $this->query("SELECT count(*) as total FROM users")->getResult();
+    }
+
 
     //Request Meminjam
     public function request()
@@ -62,7 +67,7 @@ class SistemModel extends Model
     //Jadwal
     public function jadwal()
     {
-        return $this->query("SELECT * FROM jadwal INNER JOIN peminjaman on jadwal.id_peminjaman=peminjaman.id_peminjaman INNER JOIN users on peminjaman.id_user=users.id_user INNER JOIN ruangan on peminjaman.id_ruangan = ruangan.id_ruangan AND status_jadwal!=3")->getResultArray();
+        return $this->query("SELECT * FROM jadwal INNER JOIN peminjaman on jadwal.id_peminjaman=peminjaman.id_peminjaman INNER JOIN users on peminjaman.id_user=users.id_user INNER JOIN ruangans on peminjaman.id_ruangan = ruangans.id_ruangan AND status_jadwal!=3")->getResultArray();
     }
 
     public function hapusJadwal($id_jadwal){

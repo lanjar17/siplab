@@ -39,6 +39,7 @@ $routes->delete('/hapusjadwal/(:segment)', 'AdminController::hapusjadwal/$1');
 
 $routes->get('/ruangan', 'AdminController::ruangan');
 $routes->get('/ubahruangan/(:segment)', 'AdminController::ubahruangan/$1');
+$routes->put('/updateruangan/(:segment)', 'AdminController::updateRuangan/$1');
 
 
 // Member Panel

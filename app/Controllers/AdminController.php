@@ -7,6 +7,8 @@ use App\Models\SistemModel;
 use App\Models\JadwalModel;
 use App\Models\PeminjamanModel;
 use App\Models\RuanganModel;
+use App\Models\VisitorModel;
+use CodeIgniter\RESTful\ResourceController;
 
 class AdminController extends BaseController
 {
@@ -14,6 +16,7 @@ class AdminController extends BaseController
     protected $jadwalmodel;
     protected $peminjamanmodel;
     protected $ruanganmodel;
+    private $model;
     private $session = null;
     public function __construct()
     {
@@ -21,18 +24,40 @@ class AdminController extends BaseController
         $this->jadwalmodel = new JadwalModel();
         $this->peminjamanmodel = new PeminjamanModel();
         $this->ruanganmodel = new RuanganModel();
+        helper(['visitor']);
+        $this->model = new VisitorModel();
     }
 
     public function index(): string
     {
+
+        $site_statics_today = $this->model->get_site_data_for_today();
+        $site_statics_last_week = $this->model->get_site_data_for_last_week();
+        $chart_data_today = $this->model->get_chart_data_for_today();
+        $chart_data_curr_month = $this->model->get_chart_data_for_month_year();
+
         $this->session = session();
         $nama = $this->session->get('nama_lengkap');
+
         $data = [
             'count' => $this->sistemmodel->countbelumDiterima(),
-            'nama' => $nama
+            'nama' => $nama,
+            'count_user' => $this->sistemmodel->countUser(),
+            'count_ruangan' => $this->ruanganmodel->countRuangan(),
+            'count_peminjaman' => $this->peminjamanmodel->countPeminjaman(),
+            'count_reqpeminjaman' => $this->peminjamanmodel->countreqPeminjaman(),
+            'count_jadwal' => $this->jadwalmodel->countJadwal(),
+            'visits_today' => isset($site_statics_today['visits']) ? $site_statics_today['visits'] : 0,
+            'visits_last_week' => isset($site_statics_last_week['visits']) ? $site_statics_last_week['visits'] : 0,
+            'chart_data_today' => isset($chart_data_today) ? $chart_data_today : array(),
+            'chart_data_curr_month' => isset($chart_data_curr_month) ? $chart_data_curr_month : array()
+
         ];
+
         return view('admin/dashboard', $data);
     }
+
+
 
     //NEW USER
     public function newuser()
@@ -189,13 +214,13 @@ class AdminController extends BaseController
         $dbend = strtotime($cekpeminjaman['jam_berakhir']) + strtotime($cekpeminjaman['tanggal']);
         if ($nowtime >= $dbstart and $nowtime <= $dbend) {
             $ruangan = $cekpeminjaman['id_ruangan'];
-            $cek = $this->jadwalmodel->cektersedia($id_peminjaman);
-            $cekjadwal = $this->jadwalmodel->query('SELECT * FROM jadwal INNER JOIN peminjaman, ruangans 
-			WHERE jadwal.id_peminjaman=peminjaman.id_peminjaman
-			AND peminjaman.id_ruangan=ruangans.id_ruangan
-			AND status_jadwal=1
-			AND peminjaman.id_ruangan=' . $ruangan)->getResultArray();
-            // $cekjadwal = $cek . $ruangan;
+            // $cek = $this->jadwalmodel->cektersedia($id_peminjaman);
+            // $cekjadwal = $this->jadwalmodel->query('SELECT * FROM jadwal INNER JOIN peminjaman, ruangans 
+            // WHERE jadwal.id_peminjaman=peminjaman.id_peminjaman
+            // AND peminjaman.id_ruangan=ruangans.id_ruangan
+            // AND status_jadwal=1
+            // AND peminjaman.id_ruangan=' . $ruangan)->getResultArray();
+            $cekjadwal = $this->jadwalmodel->cekjadwal($ruangan);
 
             if ($cekjadwal) {
                 $pesan = [
@@ -207,12 +232,12 @@ class AdminController extends BaseController
                     'status_ruangan' => 'Dipakai',
                     'id_ruangan' => $cekpeminjaman['id_ruangan']
                 ];
-                
+
                 $inputpeminjaman = [
                     'status_peminjaman' => 1,
                     'id_peminjaman' => $id_peminjaman
                 ];
-                
+
                 $inputjadwal = [
                     'id_jadwal' => null,
                     'id_peminjaman' => $id_peminjaman,
@@ -224,11 +249,10 @@ class AdminController extends BaseController
                 $this->ruanganmodel->save($inputruangan);
                 $this->peminjamanmodel->save($inputpeminjaman);
                 $this->jadwalmodel->save($inputjadwal);
-                
+
                 return $this->response->setJSON($pesan);
             }
-            
-        } elseif ($nowtime < $dbstart){
+        } elseif ($nowtime < $dbstart) {
             $ruangan = $cekpeminjaman['id_ruangan'];
             // $cek = $this->jadwalmodel->cektersedia2();
             // $cekjadwal = $cek . $ruangan;
@@ -241,7 +265,7 @@ class AdminController extends BaseController
             $dbone = strtotime($cekjadwal['jam_mulai']) + strtotime($cekjadwal['jam_ berakhir']) + strtotime($cekjadwal['tanggal']);
             $dbtwo = strtotime($cekpeminjaman['jam_mulai']) + strtotime($cekpeminjaman['jam_ berakhir']) + strtotime($cekpeminjaman['tanggal']);
 
-            if ($dbone == $dbtwo){
+            if ($dbone == $dbtwo) {
                 $pesan = [
                     'sukses' => 'Gagal diterima, jadwal bentrok!'
                 ];
@@ -251,7 +275,7 @@ class AdminController extends BaseController
                     'status_peminjaman' => 2,
                     'id_peminjaman' => $id_peminjaman
                 ];
-                
+
                 $inputjadwal = [
                     'id_jadwal' => null,
                     'id_peminjaman' => $id_peminjaman,
@@ -262,7 +286,7 @@ class AdminController extends BaseController
                 ];
                 $this->peminjamanmodel->save($inputpeminjaman);
                 $this->jadwalmodel->save($inputjadwal);
-                
+
                 return $this->response->setJSON($pesan);
             }
         } else {
@@ -430,9 +454,6 @@ class AdminController extends BaseController
                 'id_ruangan'    => $item['id_ruangan'],
                 'kode_ruangan' => $item['kode_ruangan'],
                 'nama_ruangan' => $item['nama_ruangan'],
-                // 'id_ruangan' => $item['id_ruangan'],
-                // 'kode' => $item['kode'],
-                // 'nama_ruangan' => $item['nama_ruangan'],
 
             ];
             $hasil = [
@@ -444,5 +465,75 @@ class AdminController extends BaseController
         return $this->response->setJSON($hasil);
     }
 
+    public function updateRuangan($id_ruangan)
+    {
+        $input = [
+            'id_ruangan' => $id_ruangan,
+            'kode_ruangan' => $this->request->getVar('kode_ruangan'),
+            'nama_ruangan' => $this->request->getVar('nama_ruangan'),
+        ];
+        $this->ruanganmodel->save($input);
+        session()->setFlashdata('congrats', 'Ruangan berhasil diubah');
+        return redirect()->to('/ruangan');
+        // $pesan = [
+        //     'sukses' => 'Profil berhasil diupdate, silahkan refresh'
+        // ];
+        // return $this->response->setJSON($pesan);
+    }
 
+
+
+
+    function get_chart_data()
+    {
+        if (isset($_POST)) {
+            if (isset($_POST['month']) && strlen($_POST['month']) && isset($_POST['year']) && strlen($_POST['year'])) {
+                $month = $_POST['month'];
+                $year = $_POST['year'];
+                $data = $this->model->get_chart_data_for_month_year($month, $year);
+
+                if ($data !== NULL) {
+                    foreach ($data as $value) {
+                        echo $value->day . "t" . $value->visits . "n";
+                    }
+                } else {
+                    $timestamp = mktime(0, 0, 0, $month);
+                    $label = date("F", $timestamp);
+                    echo '<div style="width:600px;position:relative;font-weight:bold;top:100px;margin-left:auto;margin-left:auto;color:red;">No data found for the "' . $label . '-' . $year . '"</div>';
+                }
+            } else if (isset($_POST['month']) && strlen($_POST['month'])) {
+                $month = $_POST['month'];
+                $data = $this->model->get_chart_data_for_month_year($month);
+
+                if ($data !== NULL) {
+                    foreach ($data as $value) {
+                        echo $value->day . "t" . $value->visits . "n";
+                    }
+                } else {
+                    $timestamp = mktime(0, 0, 0, $month);
+                    $label = date("F", $timestamp);
+                    echo '<div style="width:600px;position:relative;font-weight:bold;top:100px;margin-left:auto;margin-left:auto;color:red;">No data found for the "' . $label . '"</div>';
+                }
+            } else if (isset($_POST['year']) && strlen($_POST['year'])) {
+                $year = $_POST['year'];
+                $data = $this->model->get_chart_data_for_month_year(0, $year);
+                if ($data !== NULL) {
+                    foreach ($data as $value) {
+                        echo $value->day . "t" . $value->visits . "n";
+                    }
+                } else {
+                    echo '<div style="width:600px;position:relative;font-weight:bold;top:100px;margin-left:auto;margin-left:auto;color:red;">No data found for the "' . $year . '"</div>';
+                }
+            } else {
+                $data = $this->model->get_chart_data_for_month_year();
+                if ($data !== NULL) {
+                    foreach ($data as $value) {
+                        echo $value->day . "t" . $value->visits . "n";
+                    }
+                } else {
+                    echo '<div style="width:600px;position:relative;font-weight:bold;top:100px;margin-left:auto;margin-left:auto;color:red;">No data found!</div>';
+                }
+            }
+        }
+    }
 }
