@@ -60,7 +60,7 @@ class SistemModel extends Model
     //Request Meminjam
     public function request()
     {
-        return $this->query("SELECT * FROM peminjaman INNER JOIN users, ruangan WHERE peminjaman.id_user=users.id_user AND peminjaman.id_ruangan=ruangan.id_ruangan AND peminjaman.status_peminjaman='0' ORDER BY tanggal ASC")->getResultArray();
+        return $this->query("SELECT * FROM peminjaman INNER JOIN users, ruangan WHERE peminjaman.id_user=users.id_user AND peminjaman.id_ruangan=ruangans.id_ruangan AND peminjaman.status_peminjaman='0' ORDER BY tanggal ASC")->getResultArray();
     }
 
 
